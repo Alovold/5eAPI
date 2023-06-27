@@ -1,5 +1,5 @@
 import express from "express";
-import employees from "../controllers/characters.controller.js";
+import character from "../controllers/characters.controller.js";
 
 const router = express.Router();
 
@@ -8,30 +8,35 @@ router.get("/:id?", async (req, res, next) => {
   let data;
 
   if (id) {
-    data = await employees.findOne(id);
+    data = await character.findOne(id);
+    character.logRequest({ request_type: "Get", request_body: "Retrieved data for " + id});
   } else {
-    data = await employees.findAll();
+    data = await character.findAll();
+    character.logRequest({ request_type: "Get", request_body: "Retrieved all data"});
   }
 
   res.json(data);
 });
 
 router.post("/", async (req, res, next) => {
-  let employeeDTO = req.body;
-  let data = await employees.addOne(employeeDTO);
+  let characterDTO = req.body;
+  let data = await character.addOne(characterDTO);
+  character.logRequest({ request_type: "Post", request_body: "Added record for " + characterDTO.character_name});
   res.json(data);
 });
 
 router.put("/:id", async (req, res, next) => {
   let { id } = req.params;
-  let employeeDTO = req.body;
-  let data = await employees.updateOne(id, employeeDTO);
+  let characterDTO = req.body;
+  let data = await character.updateOne(id, characterDTO);
+  character.logRequest({ request_type: "Put", request_body: "Adjusted record " + id});
   res.json(data);
 });
 
 router.delete("/:id", async (req, res, next) => {
   let { id } = req.params;
-  let data = await employees.removeOne(id);
+  let data = await character.removeOne(id);
+  character.logRequest({ request_type: "Delete", request_body: "Deleted record " + id});
   res.json(data);
 });
 

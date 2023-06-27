@@ -24,6 +24,10 @@ const findAll = async () => {
     const removeOne = async (id) => {
       return await query("DELETE FROM characters WHERE character_id = ?", [id]);
     };
+
+    const logRequest = async (reqData) => {
+      return await query("INSERT INTO requests SET ?", [reqData]);
+    };
   
     export default {
       findAll,
@@ -31,4 +35,5 @@ const findAll = async () => {
       addOne,
       updateOne,
       removeOne,
+      logRequest,
     };
